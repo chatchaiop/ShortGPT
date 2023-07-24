@@ -29,7 +29,7 @@ def generateVoice(text, character, fileName, api_key=""):
 
     data = {
         "text": text,
-        "speaker": "1",
+        "speaker": "6",
         "volume": 1,
         "speed": 1,
         "type_media": "mp3",
