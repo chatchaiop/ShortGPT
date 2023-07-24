@@ -14,49 +14,45 @@ def getVoices(api_key=""):
     return voices
 
 def getCharactersFromKey(key):
-    url = 'https://api.elevenlabs.io/v1/user'
+    return 10000
+
+
+
+def generateVoice(text, character, fileName, api_key=""):
+
+    url = "https://api-voice.botnoi.ai/api/service/generate_audio"
+
     headers = {
-            'accept': '*/*',
-            'xi-api-key':key,
-            'Content-Type': 'application/json'
-        }
-    response = requests.get(url, headers=headers)
-    if response.status_code == 200:
-        sub = response.json()['subscription']
-        return sub['character_limit'] - sub['character_count']
-    else:
-        raise Exception(response.json()['detail']['message'])
-
-
-
-def generateVoice(text, character, fileName, stability=0.2, clarity=0.1, api_key=""):
-    if not api_key:
-        raise Exception("No api key")
-    charactersDict = getVoices(api_key)
-    characters = list(charactersDict.keys())
-    if character not in characters:
-        print(character, 'is not in the array of characters: ', characters)
-    voice_id = charactersDict[character]
-    url = f'https://api.elevenlabs.io/v1/text-to-speech/{voice_id}/stream'
-    headers = {
-        'accept': '*/*',
-        'xi-api-key': api_key,
-        'Content-Type': 'application/json'
+        "Content-Type": "application/json",
+        "Botnoi-Token": "716c092a6f863141eb0a8b7917cfac356f0200076c1429818c113d105c21694c",
     }
-    data = json.dumps({
-        "model_id": "eleven_multilingual_v1",
+
+    data = {
         "text": text,
-        "stability": stability,
-        "similarity_boost": clarity,
-    })
-    response = requests.post(url, headers=headers, data=data)
-    if(response.status_code == 200):
-        with open(fileName, 'wb') as f:
-            f.write(response.content)
-            return fileName
+        "speaker": "1",
+        "volume": 1,
+        "speed": 1,
+        "type_media": "mp3",
+    }
+
+    response = requests.post(url, headers=headers, json=data)
+
+    if response.status_code == 200:
+        audio_url = response.json().get('audio_url')
+        if audio_url:
+            audio_response = requests.get(audio_url)
+            if audio_response.status_code == 200:
+                with open(fileName, "wb") as f:
+                    f.write(audio_response.content)
+                    return fileName
+            else:
+                raise Exception(f"Error downloading audio, {audio_response.status_code}")
+        else:
+            raise Exception("No audio_url in response")
     else:
         message = response.text
-        raise Exception(f'Error in response, {response.status_code} , message: {message}')
+        raise Exception(f"Error in response, {response.status_code}, message: {message}")
+
     return ""
 
 # print(getCharactersFromKey(''))

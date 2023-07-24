@@ -7,4 +7,5 @@ class Language(Enum):
     GERMAN = "german"
     POLISH = "polish"
     ITALIAN = "italian"
+    THAI = "ภาษาไทย"
     PORTUGUESE = "portuguese"

@@ -76,21 +76,21 @@ def create_video_automation_ui(shortGptUI: gr.Blocks):
                     else:     
                         isVertical = "vertical" in message.lower() or "short" in message.lower()
                         state = ChatState.ASK_LANGUAGE
-                        bot_message = f"🌐What language will be used in the video?🌐 Choose from one of these ({', '.join([lang.value.lower().capitalize() for lang in Language])})"
+                        bot_message = f"🌐 คุณอยากใช้ภาษาอะไรในวีดีโอเลือกมา 1 ภาษาเลยครับ ({', '.join([lang.value.lower().capitalize() for lang in Language])})"
                 elif state == ChatState.ASK_LANGUAGE:
                     language = next((lang for lang in Language if lang.value.lower() in message.lower()), None)
                     language = language if language else Language.ENGLISH
                     state = ChatState.ASK_DESCRIPTION
-                    bot_message = "Amazing 🔥 ! 📝Can you describe thoroughly the subject of your video?📝 I will next generate you a script based on that description"
+                    bot_message = "เยียมเลย 🔥 ! 📝 ช่วยอธิบายหน่อยได้ไหมว่าคุณอยากได้วีดีโอประมาณไหน ?📝 และเดี๋ยวฉันจะสร้างวีดีโอตามนั้นให้เลย"
                 elif state == ChatState.ASK_DESCRIPTION:
                     script = generate_script(message, language.value)
                     state = ChatState.ASK_SATISFACTION
-                    bot_message = f"📝 Here is your generated script: \n\n--------------\n{script}\n\n・Are you satisfied with the script and ready to proceed with creating the video? Please respond with 'YES' or 'NO'. 👍👎"
+                    bot_message = f"📝 นี่คือสคริปที่ฉันสร้างขึ้นลองอ่านดูสิ: \n\n--------------\n{script}\n\n・ ถ้าคุณชอบมันให้พิมพ์ 'YES' และถ้าไม่ชอบให้พิมพ์ 'NO'. 👍👎"
                 elif state == ChatState.ASK_SATISFACTION:
                     if "yes" in message.lower():
                         state = ChatState.MAKE_VIDEO
                         inputVisible = False
-                        yield gr.update(visible=False), gr.Chatbot.update(value=[[None,"Your video is being made now! 🎬"]]), gr.HTML.update(value="", visible=False), gr.HTML.update(value=error_html, visible=errorVisible), gr.update(visible=folderVisible), gr.update(visible=False)
+                        yield gr.update(visible=False), gr.Chatbot.update(value=[[None,"รอสัก 5 -10 นาที ฉันจะรีบตัดต่อให้ไปกินน้ำพักผ่อนสักพักแล้วกลับมา! 🎬"]]), gr.HTML.update(value="", visible=False), gr.HTML.update(value=error_html, visible=errorVisible), gr.update(visible=folderVisible), gr.update(visible=False)
                         try:
                             video_path = makeVideo(script, language.value, isVertical, progress=progress)
                             file_name = video_path.split("/")[-1].split("\\")[-1]
@@ -108,23 +108,23 @@ def create_video_automation_ui(shortGptUI: gr.Blocks):
                             </div>'''
                             videoVisible = True
                             folderVisible = True
-                            bot_message = "Your video is completed !🎬. Scroll down below to open its file location."
+                            bot_message = "วิดีโอของคุณเสร็จสมบูรณ์ !🎬 เลื่อนลงมาด้านล่างเพื่อเปิดตำแหน่งไฟล์"
                         except Exception as e:
                             traceback_str = ''.join(traceback.format_tb(e.__traceback__))
                             error_name = type(e).__name__.capitalize()+ " : " +f"{e.args[0]}"
                             errorVisible = True
                             error_html = ERROR_TEMPLATE.format(error_message=error_name, stack_trace=traceback_str)
-                            bot_message = "We encountered an error while making this video ❌"
+                            bot_message = "เราพบข้อผิดพลาดขณะสร้างวิดีโอนี้ ❌"
                             print("Error", traceback_str)
-                            yield gr.update(visible=False), gr.Chatbot.update(value=[[None,"Your video is being made now! 🎬"]]), gr.HTML.update(value="", visible=False), gr.HTML.update(value=ERROR_TEMPLATE.format(error_message=e.args[0], stack_trace=traceback_str), visible=errorVisible), gr.update(visible=folderVisible), gr.update(visible=True)
+                            yield gr.update(visible=False), gr.Chatbot.update(value=[[None,"กำลังสร้างวิดีโอของคุณ! 🎬"]]), gr.HTML.update(value="", visible=False), gr.HTML.update(value=ERROR_TEMPLATE.format(error_message=e.args[0], stack_trace=traceback_str), visible=errorVisible), gr.update(visible=folderVisible), gr.update(visible=True)
                             
                     else:
                         state = ChatState.ASK_CORRECTION  # change state to ASK_CORRECTION
-                        bot_message = "Explain me what you want different in the script"
+                        bot_message = "ช่วยอธิบายหน่อยได้ไหมว่าคุณต้องการประมาณไหน"
                 elif state == ChatState.ASK_CORRECTION:  # new state
                     script = correct_script(script, message)  # call generateScript with correct=True
                     state = ChatState.ASK_SATISFACTION
-                    bot_message = f"📝 Here is your corrected script: \n\n--------------\n{script}\n\n・Are you satisfied with the script and ready to proceed with creating the video? Please respond with 'YES' or 'NO'. 👍👎"
+                    bot_message = f"📝 เราแก้ไขแล้วแล้วลองอ่านดูสิ: \n\n--------------\n{script}\n\n・ถ้าคุณชอบมันให้พิมพ์ 'YES' และถ้าไม่ชอบให้พิมพ์ 'NO'. 👍👎"
                 chat_history.append((message, bot_message))
                 yield gr.update(value="", visible=inputVisible), gr.Chatbot.update(value=chat_history), gr.HTML.update(value=video_html, visible=videoVisible), gr.HTML.update(value=error_html, visible=errorVisible), gr.update(visible=folderVisible), gr.update(visible=True)
 
@@ -138,7 +138,7 @@ def create_video_automation_ui(shortGptUI: gr.Blocks):
             script = ""
             video_html = ""
             videoVisible= False
-            return [[None, "🤖 Welcome to ShortGPT! 🚀 I'm a python framework aiming to simplify and automate your video editing tasks.\nLet's get started! 🎥🎬\n\n Do you want your video to be in landscape or vertical format? (landscape OR vertical)"]]                 
+            return [[None, "สวัสดีครับผมมาช่วยตัดต่อวีดีโอครับผม"]]                 
 
         def reset_conversation():
             global state, isVertical, language, script, videoVisible, video_html
