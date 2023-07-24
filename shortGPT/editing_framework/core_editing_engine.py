@@ -30,7 +30,7 @@ class CoreEditingEngine:
                     clip = self.process_image_asset(asset)
                 except Exception as e:
                     continue
-            elif asset_type == 'text':
+            elif asset_type == 'textd':
                 clip = self.process_text_asset(asset)
                 clips.append(clip)
             else:
