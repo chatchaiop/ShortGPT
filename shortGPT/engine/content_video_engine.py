@@ -69,7 +69,7 @@ class ContentVideoEngine(AbstractContentEngine):
         if not self._db_format_vertical:
             max_len = 30
         self._db_timed_captions = captions.getCaptionsWithTime(
-            whisper_analysis, maxCaptionSize=max_len)
+            whisper_analysis, maxCaptionSize=10)
 
     def _generateVideoSearchTerms(self):
         self.verifyParameters(captionsTimed=self._db_timed_captions)
@@ -133,7 +133,7 @@ class ContentVideoEngine(AbstractContentEngine):
             self.logger(self._db_timed_captions)
             for (t1, t2), text in self._db_timed_captions:
                 self.logger(text)
-                videoEditor.addEditingStep(caption_type, {'text': 'a',
+                videoEditor.addEditingStep(caption_type, {'text': text.upper(),
                                                                      'set_time_start': t1,
                                                                      'set_time_end': t2})
     
