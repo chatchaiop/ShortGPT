@@ -19,7 +19,7 @@ def getCharactersFromKey(key):
 
 
 def generateVoice(text, character, fileName, api_key=""):
-    api_key = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5dVpxQlZadWxhTTVXbUlGRTlhbHNTODljMUozIiwiaWF0IjoxNjkwMjUxOTA5LCJuYmYiOjE2OTAyNTE5MDksImp0aSI6ImRmYmI4ODM2LWE1MDgtNDhhMS04ZDE3LWMyOGRmOTVjZjEyYiIsImV4cCI6MTY5MDI3MzUwOSwidHlwZSI6ImFjY2VzcyIsImZyZXNoIjpmYWxzZSwidWlkIjoiNzVjMzg3YzAtNTI1OC01ZDRmLTk2MjAtMTI2MGUzYThhNmQzIn0.--3IKMq-F8NQ9XKBbAQm37KZ9Md4P_0GBpRvqdlnSeU"  # ใส่ API Key ของคุณที่นี่
+    api_key = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5dVpxQlZadWxhTTVXbUlGRTlhbHNTODljMUozIiwiaWF0IjoxNjkwMjg4NjI5LCJuYmYiOjE2OTAyODg2MjksImp0aSI6ImFkM2E5ODRhLWMyODktNDg3NS1iMjJjLTIyZmRmNGI1YmM0NiIsImV4cCI6MTY5MDMxMDIyOSwidHlwZSI6ImFjY2VzcyIsImZyZXNoIjpmYWxzZSwidWlkIjoiNzVjMzg3YzAtNTI1OC01ZDRmLTk2MjAtMTI2MGUzYThhNmQzIn0.oiEPHEzAhanPH5uwtx78HYmgELQziXIZa7n-aAht-L8"  # ใส่ API Key ของคุณที่นี่
     url = "https://api-genvoice.botnoi.ai/voice/v1/generate_voice"
 
     data = {
