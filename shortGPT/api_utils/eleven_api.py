@@ -19,36 +19,35 @@ def getCharactersFromKey(key):
 
 
 def generateVoice(text, character, fileName, api_key=""):
-
-    url = "https://api-voice.botnoi.ai/api/service/generate_audio"
-
-    headers = {
-        "Content-Type": "application/json",
-        "Botnoi-Token": "716c092a6f863141eb0a8b7917cfac356f0200076c1429818c113d105c21694c",
-    }
+    api_key = "eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ5dVpxQlZadWxhTTVXbUlGRTlhbHNTODljMUozIiwiaWF0IjoxNjkwMjUxOTA5LCJuYmYiOjE2OTAyNTE5MDksImp0aSI6ImRmYmI4ODM2LWE1MDgtNDhhMS04ZDE3LWMyOGRmOTVjZjEyYiIsImV4cCI6MTY5MDI3MzUwOSwidHlwZSI6ImFjY2VzcyIsImZyZXNoIjpmYWxzZSwidWlkIjoiNzVjMzg3YzAtNTI1OC01ZDRmLTk2MjAtMTI2MGUzYThhNmQzIn0.--3IKMq-F8NQ9XKBbAQm37KZ9Md4P_0GBpRvqdlnSeU"  # ใส่ API Key ของคุณที่นี่
+    url = "https://api-genvoice.botnoi.ai/voice/v1/generate_voice"
 
     data = {
+        "audio_id": "TLBIY",
         "text": text,
+        "text_delay": text,
         "speaker": "6",
-        "volume": 1,
-        "speed": 1,
-        "type_media": "mp3",
+        "volume": "100",
+        "speed": "1",
+        "type_voice": "wav",
     }
 
-    response = requests.post(url, headers=headers, json=data)
+    headers = {
+        "Accept": "application/json, text/plain, */*",
+        "Authorization": f"Bearer {api_key}",
+        "Content-Type": "application/json",
+        "Referer": "https://voice.botnoi.ai/",
+    }
+
+    response = requests.post(url, headers=headers, data=json.dumps(data))
 
     if response.status_code == 200:
-        audio_url = response.json().get('audio_url')
-        if audio_url:
-            audio_response = requests.get(audio_url)
-            if audio_response.status_code == 200:
-                with open(fileName, "wb") as f:
-                    f.write(audio_response.content)
-                    return fileName
-            else:
-                raise Exception(f"Error downloading audio, {audio_response.status_code}")
-        else:
-            raise Exception("No audio_url in response")
+        audio_data = response.content
+
+        with open(fileName, "wb") as f:
+            f.write(audio_data)
+
+        return fileName
     else:
         message = response.text
         raise Exception(f"Error in response, {response.status_code}, message: {message}")
