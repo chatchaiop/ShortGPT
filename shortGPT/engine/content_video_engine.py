@@ -130,9 +130,10 @@ class ContentVideoEngine(AbstractContentEngine):
                 caption_type = EditingStep.ADD_CAPTION_SHORT_ARABIC if self._db_language == Language.ARABIC.value else EditingStep.ADD_CAPTION_SHORT 
             else:
                 caption_type = EditingStep.ADD_CAPTION_LANDSCAPE_ARABIC if self._db_language == Language.ARABIC.value else EditingStep.ADD_CAPTION_LANDSCAPE 
-            
+            self.logger(self._db_timed_captions)
             for (t1, t2), text in self._db_timed_captions:
-                videoEditor.addEditingStep(caption_type, {'text': 'ส',
+                self.logger(text)
+                videoEditor.addEditingStep(caption_type, {'text': 'a',
                                                                      'set_time_start': t1,
                                                                      'set_time_end': t2})
     
