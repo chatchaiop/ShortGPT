@@ -65,11 +65,12 @@ class ContentVideoEngine(AbstractContentEngine):
     def _timeCaptions(self):
         self.verifyParameters(audioPath=self._db_audio_path)
         whisper_analysis = audio_utils.audioToText(self._db_audio_path)
+        print(whisper_analysis)
         max_len = 15
         if not self._db_format_vertical:
             max_len = 30
         self._db_timed_captions = captions.getCaptionsWithTime(
-            whisper_analysis, maxCaptionSize=10)
+            whisper_analysis, maxCaptionSize=max_len)
 
     def _generateVideoSearchTerms(self):
         self.verifyParameters(captionsTimed=self._db_timed_captions)
@@ -131,9 +132,11 @@ class ContentVideoEngine(AbstractContentEngine):
             else:
                 caption_type = EditingStep.ADD_CAPTION_LANDSCAPE_ARABIC if self._db_language == Language.ARABIC.value else EditingStep.ADD_CAPTION_LANDSCAPE 
             self.logger(self._db_timed_captions)
+            print(self._db_timed_captions)
             for (t1, t2), text in self._db_timed_captions:
                 self.logger(text)
-                videoEditor.addEditingStep(caption_type, {'text': text.upper(),
+                print(text)
+                videoEditor.addEditingStep(caption_type, {'text': 'a',
                                                                      'set_time_start': t1,
                                                                      'set_time_end': t2})
     
