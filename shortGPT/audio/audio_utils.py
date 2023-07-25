@@ -60,9 +60,6 @@ def audioToText(filename, model_size="large-v2"):
     if(WHISPER_MODEL == None):
         WHISPER_MODEL = load_model(model_size)
     gen = transcribe_timestamped(WHISPER_MODEL, filename,verbose=False, fp16=False)
-    text_filename = "aaa.text"
-    with open(text_filename, "w", encoding="utf-8") as f:
-        f.write(gen)
     return gen
 
 def getWordsPerSec(filename):
