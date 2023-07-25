@@ -1,4 +1,6 @@
 import re
+import pythainlp
+from pythainlp.tokenize import word_tokenize
 
 def getSpeechBlocks(whispered, silence_time=2):
     text_blocks, (st, et, txt) = [], (0,0,"")
@@ -58,7 +60,7 @@ def getCaptionsWithTime(whisper_analysis, maxCaptionSize=15, considerPunctuation
         sentences = re.split(r'(?<=[.!?]) +', text)
         words = [word for sentence in sentences for word in splitWordsBySize(sentence.split(), maxCaptionSize)]
     else:
-        words = text.split()
+        words = word_tokenize(text)
         words = [cleanWord(word) for word in splitWordsBySize(words, maxCaptionSize)]
     
     for word in words:
