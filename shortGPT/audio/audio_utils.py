@@ -59,7 +59,7 @@ def audioToText(filename, model_size="large-v2"):
     global WHISPER_MODEL
     if(WHISPER_MODEL == None):
         WHISPER_MODEL = load_model(model_size)
-    gen = transcribe_timestamped("biodatlab/whisper-th-large-combined", filename,verbose=False, fp16=False)
+    gen = transcribe_timestamped(WHISPER_MODEL, filename,verbose=False, fp16=False)
     text_filename = "aaa.text"
     with open(text_filename, "w", encoding="utf-8") as f:
         f.write(gen)
