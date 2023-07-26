@@ -60,7 +60,7 @@ def getCaptionsWithTime(whisper_analysis, maxCaptionSize=15, considerPunctuation
         sentences = sent_tokenize(text)
         words = [word for sentence in sentences for word in splitWordsBySize(sentence.split(), maxCaptionSize)]
     else:
-        words = word_tokenize(text
+        words = word_tokenize(text)
         words = [cleanWord(word) for word in splitWordsBySize(words, maxCaptionSize)]
     
     for word in words:
