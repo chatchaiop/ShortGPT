@@ -1,6 +1,6 @@
 import re
 import pythainlp
-from pythainlp.tokenize import word_tokenize
+from pythainlp.tokenize import word_tokenize, sent_tokenize
 
 def getSpeechBlocks(whispered, silence_time=2):
     text_blocks, (st, et, txt) = [], (0,0,"")
@@ -16,7 +16,7 @@ def getSpeechBlocks(whispered, silence_time=2):
     return text_blocks
 
 def cleanWord(word):
-    return re.sub(r'[^\w\s\-_"\'\']', '', word)
+    return re.sub(r'[^\w\s\-_"\'ก-๙]', '', word)
 
 def interpolateTimeFromDict(word_position, d):
     for key, value in d.items():
@@ -57,10 +57,10 @@ def getCaptionsWithTime(whisper_analysis, maxCaptionSize=15, considerPunctuation
     text = whisper_analysis['text']
     
     if considerPunctuation:
-        sentences = re.split(r'(?<=[.!?]) +', text)
+        sentences = sent_tokenize(text)
         words = [word for sentence in sentences for word in splitWordsBySize(sentence.split(), maxCaptionSize)]
     else:
-        words = word_tokenize(text)
+        words = word_tokenize(text
         words = [cleanWord(word) for word in splitWordsBySize(words, maxCaptionSize)]
     
     for word in words:
