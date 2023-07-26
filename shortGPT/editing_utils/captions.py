@@ -29,7 +29,8 @@ def getTimestampMapping(whisper_analysis):
     locationToTimestamp = {}
     for segment in whisper_analysis['segments']:
         for word in segment['words']:
-            newIndex = index + len(word['text'])+1
+            char_count = len(word['text'])  # นับจำนวนตัวอักษรในคำ
+            newIndex = index + char_count  # ใช้ char_count แทนความยาวของคำ
             locationToTimestamp[(index, newIndex)] = word['end']
             index = newIndex
     return locationToTimestamp
@@ -46,7 +47,7 @@ def splitWordsBySize(words, maxCaptionSize):
             words = words[1:]
             if len(caption) >= halfCaptionSize and words:
                 break
-        captions.append(caption)
+        captions.append(re.sub(r'[^\w\-_"\'ก-๙]+', '', caption))
     return captions
 
 def getCaptionsWithTime(whisper_analysis, maxCaptionSize=15, considerPunctuation=False):
